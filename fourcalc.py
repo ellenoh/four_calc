@@ -35,6 +35,9 @@ class MyGuiWindow(QtGui.QWidget):
         self.show()
                       
     def doClear(self):
+        """
+        Clears the calculator
+        """
         self.last_num = 0
         self.last_op = 'nothing'
         self.updateScreen()
