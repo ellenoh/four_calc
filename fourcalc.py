@@ -5,6 +5,7 @@ OP_ADD = 'add'
 OP_SUBTRACT = 'subtract'
 OP_DIVIDE = 'divide'
 OP_MULTIPLY = 'multiply'
+OP_EQUAL = 'equal'
 
 ALL_OPS = [OP_ADD, OP_SUBTRACT, OP_MULTIPLY, OP_DIVIDE]
 
@@ -65,7 +66,8 @@ class Calculator(QtGui.QWidget):
         
     def doEqual(self):
         self.doLastOp()
-        self.last_op = 'nothing'
+        self.last_num = 0
+        self.last_op = 'equal'
         
     def doAdd(self):
         self.doLastOp()        
@@ -129,6 +131,9 @@ class Calculator(QtGui.QWidget):
             cur_txt = ''
         elif self.last_op in ALL_OPS:
             cur_txt = ''
+        elif self.last_op == 'equal':
+            cur_txt = ''
+            self.last_op = 'nothing'
         cur_txt += str(num)
         self.ui.output_le.setText(cur_txt)
     
