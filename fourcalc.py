@@ -1,7 +1,14 @@
 from PyQt4 import QtGui
 import fourcalc_ui
 
-class MyGuiWindow(QtGui.QWidget):
+OP_ADD = 'add'
+OP_SUBTRACT = 'subtract'
+OP_DIVIDE = 'divide'
+OP_MULTIPLY = 'multiply'
+
+ALL_OPS = [OP_ADD, OP_SUBTRACT, OP_MULTIPLY, OP_DIVIDE]
+
+class Calculator(QtGui.QWidget):
     def __init__(self):
         QtGui.QWidget.__init__(self)
         self.ui = fourcalc_ui.Ui_Form()
@@ -32,7 +39,6 @@ class MyGuiWindow(QtGui.QWidget):
         self.ui.multiply_btn.clicked.connect(self.doMultiply)
         self.ui.divide_btn.clicked.connect(self.doDivide)
 
-        self.show()
                       
     def doClear(self):
         """
@@ -43,34 +49,37 @@ class MyGuiWindow(QtGui.QWidget):
         self.updateScreen()
     
     def doDivide(self):
-        self.setNum()        
+        self.doLastOp()        
         self.last_num = float(self.ui.output_le.text())
-        self.ui.output_le.setText('')
+        self.ui.output_le.setText(str(int(self.last_num)))
         self.last_op = 'divide'
             
     def doMultiply(self):
-        self.setNum()            
+        self.doLastOp()            
         self.last_num = float(self.ui.output_le.text())
         self.ui.output_le.setText('')
         self.last_op = 'multiply'
         
     def doSubtract(self):
-        self.setNum()                
+        self.doLastOp()                
         self.last_num = float(self.ui.output_le.text())
         self.ui.output_le.setText('')
         self.last_op = 'subtract'
         
     def doEqual(self):
-        self.setNum()
+        self.doLastOp()
         self.last_op = 'nothing'
         
     def doAdd(self):
-        self.setNum()        
+        self.doLastOp()        
         self.last_num = float(self.ui.output_le.text())
         self.ui.output_le.setText('')
-        self.last_op = 'add'
+        self.last_op = OP_ADD
     
-    def setNum(self):
+    def doLastOp(self):
+        """
+        Sets the last operation and stores the last number
+        """
         if self.last_op == 'add':
             new_num = self.last_num + float(self.ui.output_le.text())
             self.ui.output_le.setText(str(new_num)) 
@@ -113,11 +122,16 @@ class MyGuiWindow(QtGui.QWidget):
         self.appendNumber(9)
         
     def press_decimal(self):
-        self.ui.output_le.setText(self.ui.output_le.text() + '.')
+        if '.' in self.ui.output_le.text():
+            pass
+        else:
+            self.ui.output_le.setText(self.ui.output_le.text() + '.')
 
     def appendNumber(self, num):
         cur_txt = self.ui.output_le.text()
         if cur_txt == '0':
+            cur_txt = ''
+        elif self.last_op in ALL_OPS:
             cur_txt = ''
         cur_txt += str(num)
         self.ui.output_le.setText(cur_txt)
@@ -126,6 +140,8 @@ class MyGuiWindow(QtGui.QWidget):
         cur_txt = self.ui.output_le.text()
         self.ui.output_le.setText(cur_txt[0:-1])
 
-app = QtGui.QApplication([])
-window = MyGuiWindow()
-app.exec_()
+if __name__ == '__main__':
+    app = QtGui.QApplication([])
+    window = Calculator()
+    window.show()
+    app.exec_()
