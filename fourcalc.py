@@ -43,94 +43,34 @@ class MyGuiWindow(QtGui.QWidget):
         self.updateScreen()
     
     def doDivide(self):
-        if self.last_op == 'add':
-            new_num = self.last_num + float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'subtract':
-            new_num = self.last_num - float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'multiply':
-            new_num = self.last_num * float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num    
-        elif self.last_op == 'divide':
-            new_num = self.last_num / float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num  
-        
+        self.setNum()        
         self.last_num = float(self.ui.output_le.text())
         self.ui.output_le.setText('')
         self.last_op = 'divide'
             
     def doMultiply(self):
-        if self.last_op == 'add':
-            new_num = self.last_num + float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'subtract':
-            new_num = self.last_num - float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'multiply':
-            new_num = self.last_num * float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num    
-        elif self.last_op == 'divide':
-            new_num = self.last_num / float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num     
-            
+        self.setNum()            
         self.last_num = float(self.ui.output_le.text())
         self.ui.output_le.setText('')
         self.last_op = 'multiply'
         
     def doSubtract(self):
-        if self.last_op == 'add':
-            new_num = self.last_num + float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'subtract':
-            new_num = self.last_num - float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'multiply':
-            new_num = self.last_num * float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num    
-        elif self.last_op == 'divide':
-            new_num = self.last_num / float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num  
-                
+        self.setNum()                
         self.last_num = float(self.ui.output_le.text())
         self.ui.output_le.setText('')
         self.last_op = 'subtract'
         
     def doEqual(self):
-        if self.last_op == 'add':
-            new_num = self.last_num + float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-            self.last_op = 'nothing'
-        elif self.last_op == 'subtract':
-            new_num = self.last_num - float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-            self.last_op = 'nothing'
-        elif self.last_op == 'multiply':
-            new_num = self.last_num * float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-            self.last_op = 'nothing'
-        elif self.last_op == 'divide':
-            new_num = self.last_num / float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-            self.last_op = 'nothing'
+        self.setNum()
+        self.last_op = 'nothing'
         
     def doAdd(self):
+        self.setNum()        
+        self.last_num = float(self.ui.output_le.text())
+        self.ui.output_le.setText('')
+        self.last_op = 'add'
+    
+    def setNum(self):
         if self.last_op == 'add':
             new_num = self.last_num + float(self.ui.output_le.text())
             self.ui.output_le.setText(str(new_num)) 
@@ -146,11 +86,7 @@ class MyGuiWindow(QtGui.QWidget):
         elif self.last_op == 'divide':
             new_num = self.last_num / float(self.ui.output_le.text())
             self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num  
-             
-        self.last_num = float(self.ui.output_le.text())
-        self.ui.output_le.setText('')
-        self.last_op = 'add'
+            self.last_num = new_num 
         
     def updateScreen(self):
         self.ui.output_le.setText(str(self.last_num))
