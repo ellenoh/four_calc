@@ -16,7 +16,7 @@ class Calculator(QtGui.QWidget):
         self.setWindowTitle("Calculator")
         self.last_num = 0
         self.last_op = 'nothing'
-        self.updateScreen()
+        self.ui.output_le.setText('0')
         
         self.ui.k0_btn.clicked.connect(self.press_zero)
         self.ui.k1_btn.clicked.connect(self.press_one)
@@ -46,25 +46,22 @@ class Calculator(QtGui.QWidget):
         """
         self.last_num = 0
         self.last_op = 'nothing'
-        self.updateScreen()
-    
+        self.ui.output_le.setText('0')
+        
     def doDivide(self):
         self.doLastOp()        
         self.last_num = float(self.ui.output_le.text())
-        self.ui.output_le.setText(str(int(self.last_num)))
-        self.last_op = 'divide'
+        self.last_op = OP_DIVIDE
             
     def doMultiply(self):
         self.doLastOp()            
         self.last_num = float(self.ui.output_le.text())
-        self.ui.output_le.setText('')
-        self.last_op = 'multiply'
+        self.last_op = OP_MULTIPLY
         
     def doSubtract(self):
         self.doLastOp()                
         self.last_num = float(self.ui.output_le.text())
-        self.ui.output_le.setText('')
-        self.last_op = 'subtract'
+        self.last_op = OP_SUBTRACT
         
     def doEqual(self):
         self.doLastOp()
@@ -73,32 +70,31 @@ class Calculator(QtGui.QWidget):
     def doAdd(self):
         self.doLastOp()        
         self.last_num = float(self.ui.output_le.text())
-        self.ui.output_le.setText('')
         self.last_op = OP_ADD
     
     def doLastOp(self):
         """
         Sets the last operation and stores the last number
         """
-        if self.last_op == 'add':
+        if self.last_op == OP_ADD:
             new_num = self.last_num + float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'subtract':
+            self.updateScreen(new_num)
+        elif self.last_op == OP_SUBTRACT:
             new_num = self.last_num - float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num
-        elif self.last_op == 'multiply':
+            self.updateScreen(new_num)
+        elif self.last_op == OP_MULTIPLY:
             new_num = self.last_num * float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num    
-        elif self.last_op == 'divide':
+            self.updateScreen(new_num)              
+        elif self.last_op == OP_DIVIDE:
             new_num = self.last_num / float(self.ui.output_le.text())
-            self.ui.output_le.setText(str(new_num)) 
-            self.last_num = new_num 
-        
-    def updateScreen(self):
-        self.ui.output_le.setText(str(self.last_num))
+            self.updateScreen(new_num)
+            
+    def updateScreen(self, new_num):
+        self.last_num = new_num
+        if str(new_num)[-2]+str(new_num)[-1]=='.0':
+            self.ui.output_le.setText(str(int(new_num)))
+        else:
+            self.ui.output_le.setText(str(new_num))
         
     def press_zero(self):
         self.appendNumber(0)  
