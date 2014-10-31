@@ -17,6 +17,7 @@ class Calculator(QtGui.QWidget):
         self.setWindowTitle("Calculator")
         self.last_num = 0
         self.last_op = 'nothing'
+        self.hold_val = False
         self.ui.output_le.setText('0')
         
         self.ui.k0_btn.clicked.connect(self.press_zero)
@@ -68,6 +69,7 @@ class Calculator(QtGui.QWidget):
         self.doLastOp()
         self.last_num = 0
         self.last_op = 'equal'
+        self.hold_val = True
         
     def doAdd(self):
         self.doLastOp()        
@@ -90,10 +92,11 @@ class Calculator(QtGui.QWidget):
         elif self.last_op == OP_DIVIDE:
             new_num = self.last_num / float(self.ui.output_le.text())
             self.updateScreen(new_num)
-            
+        self.hold_val = True
+
     def updateScreen(self, new_num):
         self.last_num = new_num
-        if str(new_num)[-2]+str(new_num)[-1]=='.0':
+        if str(new_num)[-2:] =='.0':
             self.ui.output_le.setText(str(int(new_num)))
         else:
             self.ui.output_le.setText(str(new_num))
@@ -120,20 +123,19 @@ class Calculator(QtGui.QWidget):
         self.appendNumber(9)
         
     def press_decimal(self):
-        if '.' in self.ui.output_le.text():
-            pass
-        else:
+        if self.hold_val:
+            self.ui.output_le.setText('0.')
+            self.hold_val = False
+        elif '.' not in self.ui.output_le.text():
             self.ui.output_le.setText(self.ui.output_le.text() + '.')
 
     def appendNumber(self, num):
         cur_txt = self.ui.output_le.text()
         if cur_txt == '0':
             cur_txt = ''
-        elif self.last_op in ALL_OPS:
+        elif self.hold_val:
             cur_txt = ''
-        elif self.last_op == 'equal':
-            cur_txt = ''
-            self.last_op = 'nothing'
+            self.hold_val = False
         cur_txt += str(num)
         self.ui.output_le.setText(cur_txt)
     
